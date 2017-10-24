@@ -97,7 +97,3 @@ ENV/
 
 # mypy
 .mypy_cache/
-*.html
-db.sqlite3
-main_app_receitas/static/js/extra/nova-receita/ajaxReceitas.js
-main_app_receitas/templates/main_app_receitas/receitas.html
