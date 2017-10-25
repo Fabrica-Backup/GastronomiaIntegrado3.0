@@ -90,31 +90,39 @@ class EditIngredienteSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        print("pegando nome_Ingrediente")
         instance.nome_ingrediente = validated_data.get('nome_ingrediente', instance.nome_ingrediente)
-        print("pegando quantidade_calorica")
         instance.quantidade_calorica_ingrediente = validated_data.get('quantidade_calorica_ingrediente', instance.quantidade_calorica_ingrediente)
-        print("pegando aproveitamento_ingrediente")
         instance.aproveitamento_ingrediente = validated_data.get('aproveitamento_ingrediente', instance.aproveitamento_ingrediente)
-        print("pegando a quantidade e somando")
-        instance.quantidade_estoque_ingrediente = validated_data.get('quantidade_estoque_ingrediente', instance.quantidade_estoque_ingrediente) + instance.quantidade_estoque_ingrediente
-        print("pegando o valor")
+        #instance.quantidade_estoque_ingrediente = validated_data.get('quantidade_estoque_ingrediente', instance.quantidade_estoque_ingrediente) + instance.quantidade_estoque_ingrediente
         instance.valor_ingrediente = validated_data.get('valor_ingrediente', instance.valor_ingrediente)
-        print("pegando motivo")
         instance.motivo_retirada_estoque = validated_data.get('motivo_retirada_estoque', instance.motivo_retirada_estoque)
-        instance.save()
-        return instance
-
-        """print ("pegando o + do front")
-        if validated_data['quantidade_estoque_ingrediente'] == '+':
-            print("somando do front com o back")
+        #instance.save()
+        #return instance
+       
+        '''if validated_data['tipo'] == '+':
+            print("SOMANDO")
             instance.quantidade_estoque_ingrediente = validated_data.get('quantidade_estoque_ingrediente', 0) + instance.quantidade_estoque_ingrediente
-            print("subtraindo")
-        elif validated_data['quantidade_estoque_ingrediente'] == '-':
+        elif validated_data['tipo'] == '-':
+            print("SUBTRAINDO")
             instance.quantidade_estoque_ingrediente = validated_data.get('quantidade_estoque_ingrediente', 0) - instance.quantidade_estoque_ingrediente
         else: 
-            print("editar")
+            print("EDITANDO")
             instance.quantidade_estoque_ingrediente = validated_data.get('quantidade_estoque_ingrediente', instance.quantidade_estoque_ingrediente)
-            print("salvando")
             instance.save()
-        return instance"""
+        return instance'''
+
+        if validated_data.get('quantidade_estoque_ingrediente') > 0:
+            print("SOMANDO")
+            instance.quantidade_estoque_ingrediente = validated_data.get('quantidade_estoque_ingrediente') + instance.quantidade_estoque_ingrediente
+        elif validated_data.get('quantidade_estoque_ingrediente') < 0:
+            instance.quantidade_estoque_ingrediente = instance.quantidade_estoque_ingrediente + validated_data.get('quantidade_estoque_ingrediente')
+            if instance.quantidade_estoque_ingrediente < 0:
+                print("Estoque negativo")
+                raise serializers.ValidationError('O estoque não pode ser negativo')
+            else:
+                print("SUBTRAINDO")
+        else:
+            print("EDITANDO")
+            quantidade_estoque_ingrediente = validated_data.get('quantidade_estoque_ingrediente', instance.quantidade_estoque_ingrediente)
+        instance.save()
+        return instance
