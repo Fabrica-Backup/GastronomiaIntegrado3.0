@@ -4,19 +4,24 @@ $(function listarReceitas() {
     $.getJSON("http://localhost:8000/api/receita/list/",
         function (jsonObjectReceita) {
             console.log(jsonObjectReceita);
+            var receita = [];
 
             $.getJSON("http://localhost:8000/api/categoria/list/",
                 function (jsonObjectCategoria) {
                     console.log(jsonObjectCategoria);
+                    var categoria = [];
 
+                    var receitas = receita.concat(categoria);
                     // $.getJSON("http://localhost:8000/api/classificacao/list/", data,
                     //     function (jsonObjectClassificacao) {
                             
                     //     }
                     // );
-                    $.each(jsonObjectReceita, function (indexReceita, valueReceita) {
+                    $.each(receitas, function (indexReceita, valueReceita) {
 
-                        $.each(jsonObjectCategoria, function (indexCategoria, valueCategoria) {
+                       // $.each(jsonObjectCategoria, function (indexCategoria, valueCategoria) {
+
+                        //if (jsonObjectReceita.id_categoria == jsonObjectCategoria.id_categoria) {
                             var row = $("<tr />");
                             var buttonEdit = '<td><button type="button" class="btn btn-md" data-toggle="modal" data-target="#editReceita"><i class="fa fa-edit"></i></button></td>';
                             var buttonDelete = '<td><button type="button" id="buttonDeletar" class="btn btn-danger btn-md" ><i class="fa fa-trash-o"></i></button></td>';
@@ -28,12 +33,14 @@ $(function listarReceitas() {
                             row.append($("<td>" + valueCategoria.descricao_categoria + "</td>"));
                             row.append(buttonEdit);
                             row.append(buttonDelete);
-                            row.append(buttonView);
+                            row.append(buttonView);  
+                        }  
+                            
                         });
                     });
-                });
+                // });
 
-        });
+        //});
 
     // $.ajax({
     //     type: '1GET',
